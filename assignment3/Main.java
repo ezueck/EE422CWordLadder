@@ -1,13 +1,17 @@
 /* WORD LADDER Main.java
  * EE422C Project 3 submission by
  * Replace <...> with your actual data.
- * <Student1 Name>
- * <Student1 EID>
+ * Eduardo Zueck Garces
+ * ez2959
  * <Student1 5-digit Unique No.>
  * <Student2 Name>
  * <Student2 EID>
  * <Student2 5-digit Unique No.>
  * Slip days used: <0>
+ * Git URL:
+ * Fall 2016
+ */
+  /* Slip days used: <0>
  * Git URL:
  * Fall 2016
  */
@@ -57,6 +61,7 @@ public class Main {
 	}
 	
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
+		
 		//Timing
 		long startTime=System.currentTimeMillis();
 		ArrayList<String> wordLadder=new ArrayList<String>();
