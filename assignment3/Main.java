@@ -3,7 +3,6 @@
  * Replace <...> with your actual data.
  * Eduardo Zueck Garces
  * ez2959
- * <Student1 5-digit Unique No.>
  * <Student2 Name>
  * <Student2 EID>
  * <Student2 5-digit Unique No.>
@@ -11,11 +10,6 @@
  * Git URL:
  * Fall 2016
  */
-  /* Slip days used: <0>
- * Git URL:
- * Fall 2016
- */
-
 
 package assignment3;
 import java.util.*;
@@ -24,7 +18,6 @@ import java.io.*;
 public class Main {
 	
 	// static variables and constants only here.
-	
 	public static void main(String[] args) throws Exception {
 		
 		Scanner kb;	// input Scanner for commands
@@ -56,8 +49,21 @@ public class Main {
 	 * If command is /quit, return empty ArrayList. 
 	 */
 	public static ArrayList<String> parse(Scanner keyboard) {
-		// TO DO
-		return null;
+		
+		ArrayList<String> input = new ArrayList<String>();
+		String startWord = keyboard.next();
+		
+		//return empty if quit 
+		if(startWord.equals("/quit")){
+			return input;
+		}
+		
+		//add start/end words to ArrayList
+		String endWord = keyboard.next();
+		input.add(startWord);
+		input.add(endWord);	
+		
+		return input;
 	}
 	
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
@@ -77,6 +83,7 @@ public class Main {
 		System.out.println(diff);
 		return wordLadder;
 	}
+	
 	//Precondition: start,end same length, wordsHit initialized to empty arraylist,wordDict set
 	public static LinkedList<String> DFS(String start, String end,ArrayList<String> wordsHit,Set<String> wordDict,int depth){
 		depth++;
@@ -110,13 +117,8 @@ public class Main {
 						return result;
 					}
 				}
-			
-			}
-			
-			
-			
+			}	
 		}
-
 		return null;
 	}
 	
