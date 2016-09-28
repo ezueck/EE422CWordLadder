@@ -137,17 +137,84 @@ public class Main {
 		return indexesToIterate;
 	}
 	
+	/*
+	 * Tries to find a word ladder between the start word and the end word
+	 * Uses breadth first search algorithm 
+	 * @param String start word of ladder, String end word of ladder 
+	 * @return ArrayList of the ladder between start and end 
+	 */
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
 		
-	
 		Set<String> dict = makeDictionary();
 		
+		//check if they are of equal length, if not there's no word ladder 
+		if(start.length()!=end.length()){
+			return null;
+		}
 		
+		//make our queue and add the start word to it
+		ArrayList<String> queue = new ArrayList<String>();
+		queue.add(start);
 		
-		return null; // replace this line later with real return
+		//make an array to keep track of parentage (start word has no parent)
+		ArrayList<Integer> parents = new ArrayList<Integer>();
+		parents.add(-1);
+		
+		//iterate through our queue 
+		boolean foundEnd = false;
+		for(int queueCount = 0; queueCount<queue.size() && !foundEnd; queueCount++){
+			String parent = queue.get(queueCount);
+			
+				for(String newWord : dict){
+					//if word of the dictionary is a permutation of parent and not already in queue
+					if(permutation(parent, newWord) && !queue.contains(newWord)){
+						//add the word to the queue 
+						queue.add(newWord);
+						parents.add(queueCount);
+						
+						//check if we found the end of hte ladder 
+						if(newWord.equals(end)){
+							foundEnd = true;
+							break;
+						}
+					}
+				}		
+			}
+		
+		//make our list for the ladder
+		ArrayList<String> finalLadder = new ArrayList<String>();
+		
+		//if we didn't find a ladder just return null
+		if(!foundEnd){
+			return finalLadder;
+		}
+		
+		//build our ladder 
+		int ladder = queue.size() - 1;
+		String toAdd = queue.get(ladder);
+		while(ladder>0){
+			finalLadder.add(toAdd);
+			toAdd = queue.get(ladder);
+			ladder = parents.get(ladder);
+		}
+		
+		//final element (start word)
+		finalLadder.add(queue.get(ladder));
+		
+		//reverse it 
+		Collections.reverse(finalLadder);
+		
+		return finalLadder;
+		
 	}
     
-	public static Set<String>  makeDictionary () {
+
+    /*
+     * Builds a set of words included in the dictionary 
+     * The dictionary id used to search valid words for a ladder 
+     * @return: Set<String> of all the dictionary words 
+     */
+	public static Set<String> makeDictionary () {
 		Set<String> words = new HashSet<String>();
 		Scanner infile = null;
 		try {
@@ -163,6 +230,10 @@ public class Main {
 		return words;
 	}
 	
+	/* 
+	 * prints the word ladder between two words 
+	 * @param: ArrayList<string> ladder between the words 
+	 */
 	public static void printLadder(ArrayList<String> ladder) {
 		System.out.println(ladder.size());
 		for(int i=0;i<ladder.size();i++){
@@ -170,6 +241,25 @@ public class Main {
 			
 		}
 	}
-	// TODO
-	// Other private static methods here
+	
+	/*
+	 * Checks to see if permutations is a letter away from word 
+	 * @param: String word we start with, String permutation that we want to check
+	 * @return: boolean if permutation is a letter away
+	 */
+	public static boolean permutation(String word, String permutation){
+		
+		//iterate through all the letters
+		for(int index = 0; index<word.length(); index++){
+			
+			//if Strings are equal aside from a the letter in index, it is a valid permutation
+			String changedWord= word.substring(0, index) + word.substring(index+1, word.length());
+			String changedPermutation= permutation.substring(0, index)+ permutation.substring(index+1, permutation.length()); 	
+			if(changedWord.equals(changedPermutation)){
+				return true;
+			}
+		}
+		//couldn't find a way to change word to be permutation
+		return false;
+	}
 }
