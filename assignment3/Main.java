@@ -17,6 +17,9 @@ import java.io.*;
 
 public class Main {
 	
+	static String startEmpty;
+	static String endEmpty;
+	
 	// static variables and constants only here.
 	public static void main(String[] args) throws Exception {
 		
@@ -60,8 +63,8 @@ public class Main {
 		
 		//add start/end words to ArrayList
 		String endWord = keyboard.next();
-		input.add(startWord);
-		input.add(endWord);	
+		input.add(startWord.toUpperCase());
+		input.add(endWord.toUpperCase());	
 		
 		return input;
 	}
@@ -145,8 +148,13 @@ public class Main {
 	 */
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
 		
+    	//global fields for printing 
+    	startEmpty = start;
+    	endEmpty = end;
+    	
+    	//make dictionary
 		Set<String> dict = makeDictionary();
-		
+
 		//check if they are of equal length, if not there's no word ladder 
 		if(start.length()!=end.length()){
 			return null;
@@ -198,9 +206,6 @@ public class Main {
 			toAdd = queue.get(ladder);
 		}
 		
-		//final element (start word)
-		finalLadder.add(queue.get(ladder));
-		
 		//reverse it 
 		Collections.reverse(finalLadder);
 		
@@ -235,10 +240,23 @@ public class Main {
 	 * @param: ArrayList<string> ladder between the words 
 	 */
 	public static void printLadder(ArrayList<String> ladder) {
-		System.out.println(ladder.size());
+		
+		//deal with no ladder 
+		if( ladder.size() == 0){
+			System.out.println("no word ladder can be found between " + startEmpty.toLowerCase() + " and " + endEmpty.toLowerCase() + ".");
+			return;
+		}
+		
+		//get start and end 
+		String startWord = ladder.get(0);
+		String endWord = ladder.get(ladder.size() - 1 );
+		
+		//print initial message 
+		System.out.println("a " + (ladder.size()-2) + "-rung word ladder exists between " + startWord.toLowerCase() + " and " + endWord.toLowerCase() + ".");
+		
+		//print all the words in our ladder 
 		for(int i=0;i<ladder.size();i++){
-			System.out.println(ladder.get(i));
-			
+			System.out.println(ladder.get(i).toLowerCase());
 		}
 	}
 	
@@ -247,7 +265,7 @@ public class Main {
 	 * @param: String word we start with, String permutation that we want to check
 	 * @return: boolean if permutation is a letter away
 	 */
-	public static boolean permutation(String word, String permutation){
+	private static boolean permutation(String word, String permutation){
 		
 		//iterate through all the letters
 		for(int index = 0; index<word.length(); index++){
