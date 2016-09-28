@@ -194,8 +194,8 @@ public class Main {
 		String toAdd = queue.get(ladder);
 		while(ladder>0){
 			finalLadder.add(toAdd);
-			toAdd = queue.get(ladder);
 			ladder = parents.get(ladder);
+			toAdd = queue.get(ladder);
 		}
 		
 		//final element (start word)
@@ -218,7 +218,7 @@ public class Main {
 		Set<String> words = new HashSet<String>();
 		Scanner infile = null;
 		try {
-			infile = new Scanner (new File("C:\\Users\\pkavikon\\Desktop\\School\\Fall2016\\EE422C\\workspace\\Project3\\bin\\assignment3\\five_letter_words.txt"));
+			infile = new Scanner (new File("five_letter_words.txt"));
 		} catch (FileNotFoundException e) {
 			System.out.println("Dictionary File not Found!");
 			e.printStackTrace();
