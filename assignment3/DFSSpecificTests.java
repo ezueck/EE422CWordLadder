@@ -8,10 +8,7 @@ import org.junit.Test;
 
 public class DFSSpecificTests {
 
-	@Test
-	public void test() {
-		fail("Not yet implemented");
-	}
+
 	@Test
 	public void DFSLadder1() {
 		String start = "SMART";
@@ -24,6 +21,7 @@ public class DFSSpecificTests {
 			fail("Too slow");
 		}
 		System.out.println("DFSLadder1 "+diff);
+		Main.printLadder(ladder);
 	
 	}
 	
@@ -38,7 +36,11 @@ public class DFSSpecificTests {
 		if (diff>30000){
 			fail("Too slow");
 		}
+		if (ladder.size()!= 0){
+			fail("Not correct size");
+		}
 		System.out.println("emptyLadderDFS1 "+diff);
+		Main.printLadder(ladder);
 	
 	}
 	
@@ -57,6 +59,7 @@ public class DFSSpecificTests {
 			fail("Not correct size");
 		}
 		System.out.println("emptyLadderDFS2 "+ diff);
+		Main.printLadder(ladder);
 	}
 	
 	@Test
@@ -71,6 +74,7 @@ public class DFSSpecificTests {
 			fail("Too slow");
 		}
 		System.out.println("zeroRungDFS "+diff);
+		Main.printLadder(ladder);
 
 	}
 	
@@ -86,13 +90,8 @@ public class DFSSpecificTests {
 			fail("Too slow");
 		}
 		System.out.println("DFSLadder2 "+diff);
+		Main.printLadder(ladder);
 
 	} 
-	@Test
-	public void DFSLadder3(){
-		
-		
-		
-		
-	}
+
 }

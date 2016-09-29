@@ -105,6 +105,10 @@ public class Main {
 	 */
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
 		
+		//global fields for printing 
+    	startEmpty = start;
+    	endEmpty = end;
+		
 		//Make wordLadder to return
 		ArrayList<String> wordLadder=new ArrayList<String>();
 		//If start word length and end word length are not equal
@@ -135,6 +139,9 @@ public class Main {
 	 */
 	private static LinkedList<Integer> FastDFS(int start,int end,ArrayList<Integer> wordsHit,int depth){
 		depth++;
+		
+	
+		
 		
 		//End when the start word and end word are equal
 		if(start==end){
