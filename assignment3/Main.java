@@ -139,10 +139,7 @@ public class Main {
 	 */
 	private static LinkedList<Integer> FastDFS(int start,int end,ArrayList<Integer> wordsHit,int depth){
 		depth++;
-		
-	
-		
-		
+
 		//End when the start word and end word are equal
 		if(start==end){
 			return new LinkedList<Integer>();
@@ -152,16 +149,34 @@ public class Main {
 		wordsHit.add(start);
 		LinkedList<Integer> result;
 		
-		//Scan through each word that can be reached from the current word(start) and run DFS on each word(if the word has not already reached been reached)
-		for(int i=0;i<adjacentList.get(start).size();i++){
-			if(wordsHit.indexOf(adjacentList.get(start).get(i))!=-1){
-				continue;
-			}
-			//result of FastDFS will be null if no path is found
-			result=FastDFS(adjacentList.get(start).get(i),end,wordsHit,depth);
-			if(result!=null){
-				result.addFirst(start);
-				return result;
+		//check number of differences 
+		ArrayList<Integer> differences = new ArrayList<Integer>();
+		
+		//get the differences of all the words 
+		for(int i=0; i<adjacentList.get(start).size(); i++){
+			String currentWord = dict.get(end);
+			String newWord = dict.get(adjacentList.get(start).get(i));
+			differences.add(differences(currentWord, newWord));
+		}
+		
+		//we do it in order of difference
+		for(int k = 0; k<6; k++){ 
+			
+			//Scan through each word that can be reached from the current word(start) and run DFS on each word(if the word has not already reached been reached)
+			for(int i=0;i<adjacentList.get(start).size();i++){
+				
+				//if difference is equal to iterator, recursion
+				if(differences.get(i) == k){
+					if(wordsHit.indexOf(adjacentList.get(start).get(i))!=-1){
+						continue;
+					}
+					//result of FastDFS will be null if no path is found
+					result=FastDFS(adjacentList.get(start).get(i),end,wordsHit,depth);
+					if(result!=null){
+						result.addFirst(start);
+						return result;
+					}
+				}
 			}
 		}
 		return null;
@@ -345,5 +360,20 @@ public class Main {
 		
 		//word is not adjacent
 		return false;
+	}
+	
+	/*
+	 * Checks the number of diferences between two words 
+	 */
+	private static int differences(String word, String other){
+		
+		int differences = 0;
+		for(int i = 0; i<word.length(); i++){
+			if(word.charAt(i)!= other.charAt(i)){
+				differences++;
+			}
+		}
+		
+		return differences;
 	}
 }
