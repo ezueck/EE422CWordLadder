@@ -3,11 +3,11 @@
  * Replace <...> with your actual data.
  * Eduardo Zueck Garces
  * ez2959
- * <Student2 Name>
- * <Student2 EID>
- * <Student2 5-digit Unique No.>
+ * Pranav Kavikondala
+ * pk6994
+ * 16470
  * Slip days used: <0>
- * Git URL:
+ * Git URL: https://github.com/ezueckg/EE422CWordLadder
  * Fall 2016
  */
 
@@ -95,51 +95,31 @@ public class Main {
 	
 
 	
-	//Precondition: start,end same length, wordsHit initialized to empty arraylist,wordDict set
-	public static LinkedList<String> DFS(String start, String end,ArrayList<String> wordsHit,Set<String> wordDict,int depth){
-		depth++;
-		//System.out.println(depth);
-		if(start.length()!=end.length()){
-			return null;
-		}
-		if(start.equals(end)){
-			LinkedList<String> result=new LinkedList<String>();
-			return result;
-		}
-		
-		String changedStart;
-		String changedDictWord;
-		wordsHit.add(start);
-		for(String s : wordDict){
-			if(s.length()!=start.length() || wordsHit.indexOf(s)!=-1){
-				continue;
-				
-			}
-			for(Integer letter:optomize(s,end)){
-			//for(int letter=0;letter<start.length();letter++){
-				changedDictWord=s.substring(0, letter)+s.substring(letter+1,start.length());
-				changedStart=start.substring(0, letter)+start.substring(letter+1,start.length());
-				if(changedDictWord.equals(changedStart)){
-					//System.out.println("---------------"+start);
-					//System.out.println(s);
-					LinkedList<String> result=DFS(s,end,wordsHit,wordDict,depth);
-					if(result!=null){
-						result.addFirst(s);
-						return result;
-					}
-				}
-			}	
-		}
-		return null;
-	}
+	
+	
+	/**
+	 * Finds the word ladder using DFS for a start and end word 
+	 * @param start String of start word
+	 * @param end String of end word
+	 * @return ArrayList<String> containg the word ladder from start to end
+	 */
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
 		
-
+		//global fields for printing 
+    	startEmpty = start;
+    	endEmpty = end;
+		
+		//Make wordLadder to return
 		ArrayList<String> wordLadder=new ArrayList<String>();
+		//If start word length and end word length are not equal
 		if(start.length()!=end.length()){
 			return wordLadder;
 		}
+		
+		//Linked list holds word ladder; null if the ladder does not exist
 		LinkedList<Integer> result=FastDFS(dict.indexOf(start),dict.indexOf(end),new ArrayList<Integer>(),0);
+		
+		//Make the word ladder from the linked list
 		if(result!=null && result.size()!=0){
 			wordLadder.add(start);
 			while(result.size()!=0){
@@ -149,42 +129,44 @@ public class Main {
 		return wordLadder;
 	}
 
-	public static LinkedList<Integer> FastDFS(int start,int end,ArrayList<Integer> wordsHit,int depth){
+	/**
+	 * Recursive DFS algorithm using indexes of words
+	 * @param start int corresponding to the index in wordarrayList that represents the start word
+	 * @param end int corresponding to the index in wordarrayList that represents the end word
+	 * @param wordsHit ArrayList<Integer> of the words that have been reached
+	 * @param depth int representing the depth of recursion
+	 * @return LinkedList<Integer> holding nodes that lead to end word from start; null if no path
+	 */
+	private static LinkedList<Integer> FastDFS(int start,int end,ArrayList<Integer> wordsHit,int depth){
 		depth++;
+		
+	
+		
+		
+		//End when the start word and end word are equal
 		if(start==end){
 			return new LinkedList<Integer>();
 		}
+		
+		//Add current word to words reached list
 		wordsHit.add(start);
 		LinkedList<Integer> result;
+		
+		//Scan through each word that can be reached from the current word(start) and run DFS on each word(if the word has not already reached been reached)
 		for(int i=0;i<adjacentList.get(start).size();i++){
 			if(wordsHit.indexOf(adjacentList.get(start).get(i))!=-1){
 				continue;
 			}
+			//result of FastDFS will be null if no path is found
 			result=FastDFS(adjacentList.get(start).get(i),end,wordsHit,depth);
 			if(result!=null){
 				result.addFirst(start);
 				return result;
 			}
-			
 		}
 		return null;
 	}
 
-	
-	private static ArrayList<Integer> optomize(String start,String end){
-		ArrayList<Integer> indexesToIterate=new ArrayList<Integer>();
-		ArrayList<Integer> otherIndexes=new ArrayList<Integer>();
-		for(int i=0;i<start.length();i++){
-			if(!start.substring(i,i+1).equals(end.substring(i,i+1))){
-				indexesToIterate.add(i);
-			}
-			else{
-				otherIndexes.add(i);
-			}
-		}
-		indexesToIterate.addAll(otherIndexes);
-		return indexesToIterate;
-	}
 	
     
 	/*

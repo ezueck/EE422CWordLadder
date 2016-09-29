@@ -1,3 +1,4 @@
+
 package assignment3;
 
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ public class PermutationTest {
 	public void test() {
 		Scanner kb = new Scanner(System.in);
 		ArrayList<String> wordTest = Main.parse(kb);
-		System.out.println(Main.adjacent(wordTest.get(0), wordTest.get(1)));
+		//System.out.println(Main.permutation(wordTest.get(0), wordTest.get(1)));
 	}
 
 }
