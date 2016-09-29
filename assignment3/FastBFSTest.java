@@ -21,7 +21,7 @@ public class FastBFSTest {
 			System.out.println("inputpls");
 			input = Main.parse(kb);
 			startTime = System.currentTimeMillis();
-			ArrayList<String> ladder = Main.getWordLadderBFSFFast(input.get(0), input.get(1));
+			ArrayList<String> ladder = Main.getWordLadderBFS(input.get(0), input.get(1));
 			diff=Math.abs(startTime-System.currentTimeMillis());
 			System.out.println(diff);
 			Main.printLadder(ladder);
