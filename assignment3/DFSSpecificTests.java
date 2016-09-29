@@ -23,6 +23,7 @@ public class DFSSpecificTests {
 		if (diff>30000){
 			fail("Too slow");
 		}
+		System.out.println("DFSLadder1 "+diff);
 	
 	}
 	
@@ -37,6 +38,7 @@ public class DFSSpecificTests {
 		if (diff>30000){
 			fail("Too slow");
 		}
+		System.out.println("emptyLadderDFS1 "+diff);
 	
 	}
 	
@@ -54,6 +56,7 @@ public class DFSSpecificTests {
 		if (ladder.size()!= 0){
 			fail("Not correct size");
 		}
+		System.out.println("emptyLadderDFS2 "+ diff);
 	}
 	
 	@Test
@@ -67,6 +70,7 @@ public class DFSSpecificTests {
 		if (diff>30000){
 			fail("Too slow");
 		}
+		System.out.println("zeroRungDFS "+diff);
 
 	}
 	
@@ -81,6 +85,7 @@ public class DFSSpecificTests {
 		if (diff>30000){
 			fail("Too slow");
 		}
+		System.out.println("DFSLadder2 "+diff);
 
 	} 
 	@Test
