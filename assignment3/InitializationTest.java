@@ -10,8 +10,8 @@ public class InitializationTest {
 	public void test() {
 		long startTime=System.currentTimeMillis();
 		Main.initialize();
-		long diff=Math.abs(startTime-System.currentTimeMillis());
-		System.out.println(diff);
+			long diff=Math.abs(startTime-System.currentTimeMillis());
+			System.out.println(diff);
 	}
 
 }

@@ -29,9 +29,11 @@ public class Main {
 		initialize();
 		Scanner kb = new Scanner(System.in);	// input Scanner for commands
 		
+		//run until we quit 
 		while(true){
 			ArrayList<String> input = parse(kb);
-			printLadder(getWordLadderDFS("HELPS","HEARD"));//Heard->Helps
+			printLadder(getWordLadderDFS(input.get(0), input.get(1)));
+			printLadder(getWordLadderBFS(input.get(0), input.get(1)));
 		}
 		
 	}
