@@ -19,31 +19,51 @@ public class Main {
 	
 	static String startEmpty;
 	static String endEmpty;
+	static ArrayList<ArrayList<Integer>> adjacentList;
+	static ArrayList<String> dict;
 	
 	// static variables and constants only here.
 	public static void main(String[] args) throws Exception {
 		
-		Scanner kb;	// input Scanner for commands
-		PrintStream ps;	// output file
-		// If arguments are specified, read/write from/to files instead of Std IO.
-		if (args.length != 0) {
-			kb = new Scanner(new File(args[0]));
-			ps = new PrintStream(new File(args[1]));
-			System.setOut(ps);			// redirect output to ps
-		} else {
-			kb = new Scanner(System.in);// default from Stdin
-			ps = System.out;			// default to Stdout
-		}
+		//intialize everything and the scanner 
 		initialize();
-		printLadder(getWordLadderDFS("HELPS","HEARD"));//Heard->Helps
+		Scanner kb = new Scanner(System.in);	// input Scanner for commands
+		
+		while(true){
+			ArrayList<String> input = parse(kb);
+			printLadder(getWordLadderDFS("HELPS","HEARD"));//Heard->Helps
+		}
 		
 	}
 	
 	public static void initialize() {
 		
-		// initialize your static variables or constants here.
-		// We will call this method before running our JUNIT tests.  So call it 
-		// only once at the start of main.
+		//make a dictionary list 
+		dict = makeDictionaryList();
+		
+		//initialize an adjecency list
+		ArrayList<ArrayList<Integer>> list = new ArrayList<ArrayList<Integer>>();
+		
+		
+		//iterate through all the words to find its adjacent words 
+		for(int wordCount = 0; wordCount<dict.size(); wordCount++ ){
+			
+			//new list of adjacent words
+			ArrayList<Integer> wordConnection = new ArrayList<Integer>();
+			
+			//for all the words in the dictionary check if adjacent
+			for(int connectCount  = 0 ; connectCount<dict.size(); connectCount++ ){
+				if(connectCount!=wordCount){
+					//they are adjacent, so add
+					if(adjacent(dict.get(wordCount), dict.get(connectCount))){
+						wordConnection.add(connectCount);
+					}
+				}
+			}
+			list.add(wordConnection);
+		}
+		
+		adjacentList = list;
 	}
 	
 	/**
@@ -152,9 +172,6 @@ public class Main {
     	startEmpty = start;
     	endEmpty = end;
     	
-    	//make dictionary
-		Set<String> dict = makeDictionary();
-
 		//check if they are of equal length, if not there's no word ladder 
 		if(start.length()!=end.length()){
 			return null;
@@ -174,8 +191,9 @@ public class Main {
 			String parent = queue.get(queueCount);
 			
 				for(String newWord : dict){
-					//if word of the dictionary is a permutation of parent and not already in queue
-					if(permutation(parent, newWord) && !queue.contains(newWord)){
+					//if word of the dictionary is a adjacent of parent and not already in queue
+					if(adjacent(parent, newWord) && !queue.contains(newWord)){
+						
 						//add the word to the queue 
 						queue.add(newWord);
 						parents.add(queueCount);
@@ -213,6 +231,85 @@ public class Main {
 		
 	}
     
+	/*
+	 * Tries to find a word ladder between the start word and the end word
+	 * Uses breadth first search algorithm and our adjacentList 
+	 * @param String start word of ladder, String end word of ladder 
+	 * @return ArrayList of the ladder between start and end 
+	 */
+    public static ArrayList<String> getWordLadderBFSFFast(String start, String end) {
+		
+    	//global fields for printing 
+    	startEmpty = start;
+    	endEmpty = end;
+    	
+		//check if they are of equal length, if not there's no word ladder 
+		if(start.length()!=end.length()){
+			return null;
+		}
+		
+		//make our queue and add the start word to it
+		ArrayList<Integer> indexQueue = new ArrayList<Integer>();
+		indexQueue.add(dict.indexOf(start));
+		
+		//make an array to keep track of parentage (start word has no parent)
+		ArrayList<Integer> parents = new ArrayList<Integer>();
+		parents.add(-1);
+		
+		//iterate through our queue 
+		boolean foundEnd = false;
+		for(int queueCount = 0; queueCount<indexQueue.size() && !foundEnd; queueCount++){
+			
+			//get adjacent words to the queue word
+			ArrayList<Integer> listConnections = adjacentList.get(indexQueue.get(queueCount));
+			
+			//add all adjacents to queue 
+			for(int newWordCount = 0; newWordCount<listConnections.size(); newWordCount++){
+				
+				//if not in queue already
+				int newWordIndex = listConnections.get(newWordCount);
+				if(!indexQueue.contains(newWordIndex)){
+					
+					//add new word to queue 
+					indexQueue.add(newWordIndex);
+					parents.add(queueCount);
+					String newWord = dict.get(newWordIndex);
+					
+					//check if we found the end of the ladder 
+					if(newWord.equals(end)){
+						foundEnd = true;
+						break;
+					}
+				}		
+			}
+		}
+		
+		//make our list for the ladder
+		ArrayList<String> finalLadder = new ArrayList<String>();
+		
+		//if we didn't find a ladder just return null
+		if(!foundEnd){
+			return finalLadder;
+		}
+		
+		//build our ladder 
+		int ladder = indexQueue.size() - 1;
+		String toAdd = dict.get(indexQueue.get(ladder));
+		while(ladder>0){
+			finalLadder.add(toAdd);
+			ladder = parents.get(ladder);
+			toAdd = dict.get(indexQueue.get(ladder));
+		}
+		
+		//add the start word
+		finalLadder.add(toAdd);
+		
+		//reverse it and return
+		Collections.reverse(finalLadder);
+		return finalLadder;
+		
+	}
+    
 
     /*
      * Builds a set of words included in the dictionary 
@@ -234,6 +331,28 @@ public class Main {
 		}
 		return words;
 	}
+	
+    /*
+     * Builds a set of words included in the dictionary 
+     * The dictionary id used to search valid words for a ladder 
+     * @return: Set<String> of all the dictionary words 
+     */
+	public static ArrayList<String> makeDictionaryList () {
+		ArrayList<String> words = new ArrayList<String>();
+		Scanner infile = null;
+		try {
+			infile = new Scanner (new File("five_letter_words.txt"));
+		} catch (FileNotFoundException e) {
+			System.out.println("Dictionary File not Found!");
+			e.printStackTrace();
+			System.exit(1);
+		}
+		while (infile.hasNext()) {
+			words.add(infile.next().toUpperCase());
+		}
+		return words;
+	}
+	
 	
 	/* 
 	 * prints the word ladder between two words 
@@ -261,23 +380,24 @@ public class Main {
 	}
 	
 	/*
-	 * Checks to see if permutations is a letter away from word 
-	 * @param: String word we start with, String permutation that we want to check
-	 * @return: boolean if permutation is a letter away
+	 * Checks to see if a word is adjacent to another word
+	 * @param: String word we start with, String adjacent word that we want to check
+	 * @return: boolean if it is adjacent
 	 */
-	private static boolean permutation(String word, String permutation){
+	private static boolean adjacent(String word, String adjacent){
 		
 		//iterate through all the letters
 		for(int index = 0; index<word.length(); index++){
 			
-			//if Strings are equal aside from a the letter in index, it is a valid permutation
+			//if Strings are equal aside from a the letter in index, it is a valid adjacent
 			String changedWord= word.substring(0, index) + word.substring(index+1, word.length());
-			String changedPermutation= permutation.substring(0, index)+ permutation.substring(index+1, permutation.length()); 	
-			if(changedWord.equals(changedPermutation)){
+			String changedadjacent= adjacent.substring(0, index)+ adjacent.substring(index+1, adjacent.length()); 	
+			if(changedWord.equals(changedadjacent)){
 				return true;
 			}
 		}
-		//couldn't find a way to change word to be permutation
+		
+		//word is not adjacent
 		return false;
 	}
 }
