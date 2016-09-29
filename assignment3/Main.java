@@ -91,23 +91,7 @@ public class Main {
 		return input;
 	}
 	
-	public static ArrayList<String> getWordLadderDFS(String start, String end) {
-		
-		//Timing
-		long startTime=System.currentTimeMillis();
-		ArrayList<String> wordLadder=new ArrayList<String>();
-		Set<String> dict = makeDictionary();
-		LinkedList<String> result=DFS(start,end,new ArrayList<String>(),dict,0);
-		if(result!=null && result.size()!=0){
-			wordLadder.add(start);
-			while(result.size()!=0){
-				wordLadder.add(result.removeFirst());
-			}
-		}
-		long diff=Math.abs(startTime-System.currentTimeMillis());
-		System.out.println(diff);
-		return wordLadder;
-	}
+
 	
 	//Precondition: start,end same length, wordsHit initialized to empty arraylist,wordDict set
 	public static LinkedList<String> DFS(String start, String end,ArrayList<String> wordsHit,Set<String> wordDict,int depth){
@@ -144,8 +128,47 @@ public class Main {
 				}
 			}	
 		}
+		return nul
+		l;
+	}
+	public static ArrayList<String> getWordLadderDFS(String start, String end) {
+		
+
+		ArrayList<String> wordLadder=new ArrayList<String>();
+		if(start.length()!=end.length()){
+			return wordLadder;
+		}
+		LinkedList<Integer> result=FastDFS(dict.indexOf(start),dict.indexOf(end),new ArrayList<Integer>(),0);
+		if(result!=null && result.size()!=0){
+			wordLadder.add(start);
+			while(result.size()!=0){
+				wordLadder.add(dict.get(result.removeFirst()));
+			}
+		}
+		return wordLadder;
+	}
+
+	public static LinkedList<Integer> FastDFS(int start,int end,ArrayList<Integer> wordsHit,int depth){
+		depth++;
+		if(start==end){
+			return new LinkedList<Integer>();
+		}
+		wordsHit.add(start);
+		LinkedList<Integer> result;
+		for(int i=0;i<adjacentList.get(start).size();i++){
+			if(wordsHit.indexOf(adjacentList.get(start).get(i))!=-1){
+				continue;
+			}
+			result=FastDFS(adjacentList.get(start).get(i),end,wordsHit,depth);
+			if(result!=null){
+				result.addFirst(start);
+				return result;
+			}
+			
+		}
 		return null;
 	}
+
 	
 	private static ArrayList<Integer> optomize(String start,String end){
 		ArrayList<Integer> indexesToIterate=new ArrayList<Integer>();
