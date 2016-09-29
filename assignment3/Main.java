@@ -35,35 +35,37 @@ public class Main {
 		}
 		
 	}
-	
+	/*
+	 * initializes an adjacency list for our dictionary 
+	 * it takes a long time to process (~1 minute) but it makes everything very fast 
+	 * 
+	 */
 	public static void initialize() {
 		
 		//make a dictionary list 
 		dict = makeDictionaryList();
 		
-		//initialize an adjecency list
-		ArrayList<ArrayList<Integer>> list = new ArrayList<ArrayList<Integer>>();
+		//initialize the adjacency list
+		adjacentList = new ArrayList<ArrayList<Integer>>();
 		
-		
+		//intialize it 
+		for(int i = 0; i<dict.size(); i++){
+			adjacentList.add(new ArrayList<Integer>());
+		}
+	
 		//iterate through all the words to find its adjacent words 
 		for(int wordCount = 0; wordCount<dict.size(); wordCount++ ){
 			
-			//new list of adjacent words
-			ArrayList<Integer> wordConnection = new ArrayList<Integer>();
-			
 			//for all the words in the dictionary check if adjacent
-			for(int connectCount  = 0 ; connectCount<dict.size(); connectCount++ ){
-				if(connectCount!=wordCount){
-					//they are adjacent, so add
-					if(adjacent(dict.get(wordCount), dict.get(connectCount))){
-						wordConnection.add(connectCount);
-					}
+			for(int connectCount = wordCount+1 ; connectCount<dict.size(); connectCount++ ){
+				
+				//they are adjacent, so add to their corresponding lists
+				if(adjacent(dict.get(wordCount), dict.get(connectCount))){
+					adjacentList.get(wordCount).add(connectCount);
+					adjacentList.get(connectCount).add(wordCount);
 				}
 			}
-			list.add(wordConnection);
 		}
-		
-		adjacentList = list;
 	}
 	
 	/**
@@ -263,7 +265,7 @@ public class Main {
 			//get adjacent words to the queue word
 			ArrayList<Integer> listConnections = adjacentList.get(indexQueue.get(queueCount));
 			
-			//add all adjacents to queue 
+			//add all adjacent words to queue 
 			for(int newWordCount = 0; newWordCount<listConnections.size(); newWordCount++){
 				
 				//if not in queue already
@@ -338,18 +340,26 @@ public class Main {
      * @return: Set<String> of all the dictionary words 
      */
 	public static ArrayList<String> makeDictionaryList () {
+		
+		//make array list
 		ArrayList<String> words = new ArrayList<String>();
 		Scanner infile = null;
+		
+		//look for file 
 		try {
 			infile = new Scanner (new File("five_letter_words.txt"));
-		} catch (FileNotFoundException e) {
+		} catch (FileNotFoundException e) { //throw exception if no file was found 
 			System.out.println("Dictionary File not Found!");
 			e.printStackTrace();
 			System.exit(1);
 		}
+		
+		//add all words in dictionary
 		while (infile.hasNext()) {
 			words.add(infile.next().toUpperCase());
 		}
+		
+		//return array list
 		return words;
 	}
 	

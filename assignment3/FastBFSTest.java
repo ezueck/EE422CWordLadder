@@ -11,7 +11,10 @@ public class FastBFSTest {
 
 	@Test
 	public void test() {
+		long startTime=System.currentTimeMillis();
 		Main.initialize();
+		long diff=Math.abs(startTime-System.currentTimeMillis());
+		System.out.println(diff);
 		Scanner kb = new Scanner(System.in);	// input Scanner for commands
 		ArrayList<String> input;
 		while(true){
