@@ -130,8 +130,7 @@ public class Main {
 				}
 			}	
 		}
-		return nul
-		l;
+		return null;
 	}
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
 		
@@ -187,76 +186,6 @@ public class Main {
 		return indexesToIterate;
 	}
 	
-	/*
-	 * Tries to find a word ladder between the start word and the end word
-	 * Uses breadth first search algorithm 
-	 * @param String start word of ladder, String end word of ladder 
-	 * @return ArrayList of the ladder between start and end 
-	 */
-    public static ArrayList<String> getWordLadderBFS(String start, String end) {
-		
-    	//global fields for printing 
-    	startEmpty = start;
-    	endEmpty = end;
-    	
-		//check if they are of equal length, if not there's no word ladder 
-		if(start.length()!=end.length()){
-			return null;
-		}
-		
-		//make our queue and add the start word to it
-		ArrayList<String> queue = new ArrayList<String>();
-		queue.add(start);
-		
-		//make an array to keep track of parentage (start word has no parent)
-		ArrayList<Integer> parents = new ArrayList<Integer>();
-		parents.add(-1);
-		
-		//iterate through our queue 
-		boolean foundEnd = false;
-		for(int queueCount = 0; queueCount<queue.size() && !foundEnd; queueCount++){
-			String parent = queue.get(queueCount);
-			
-				for(String newWord : dict){
-					//if word of the dictionary is a adjacent of parent and not already in queue
-					if(adjacent(parent, newWord) && !queue.contains(newWord)){
-						
-						//add the word to the queue 
-						queue.add(newWord);
-						parents.add(queueCount);
-						
-						//check if we found the end of hte ladder 
-						if(newWord.equals(end)){
-							foundEnd = true;
-							break;
-						}
-					}
-				}		
-			}
-		
-		//make our list for the ladder
-		ArrayList<String> finalLadder = new ArrayList<String>();
-		
-		//if we didn't find a ladder just return null
-		if(!foundEnd){
-			return finalLadder;
-		}
-		
-		//build our ladder 
-		int ladder = queue.size() - 1;
-		String toAdd = queue.get(ladder);
-		while(ladder>0){
-			finalLadder.add(toAdd);
-			ladder = parents.get(ladder);
-			toAdd = queue.get(ladder);
-		}
-		
-		//reverse it 
-		Collections.reverse(finalLadder);
-		
-		return finalLadder;
-		
-	}
     
 	/*
 	 * Tries to find a word ladder between the start word and the end word
@@ -264,7 +193,7 @@ public class Main {
 	 * @param String start word of ladder, String end word of ladder 
 	 * @return ArrayList of the ladder between start and end 
 	 */
-    public static ArrayList<String> getWordLadderBFSFFast(String start, String end) {
+    public static ArrayList<String> getWordLadderBFS(String start, String end) {
 		
     	//global fields for printing 
     	startEmpty = start;
