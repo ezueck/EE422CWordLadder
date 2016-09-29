@@ -121,11 +121,12 @@ public class Main {
 		
 		//Make the word ladder from the linked list
 		if(result!=null && result.size()!=0){
-			wordLadder.add(start);
 			while(result.size()!=0){
 				wordLadder.add(dict.get(result.removeFirst()));
 			}
+			wordLadder.add(end);
 		}
+		
 		return wordLadder;
 	}
 
